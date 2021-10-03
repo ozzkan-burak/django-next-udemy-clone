@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.models from BaseUserManager
-from udemy.courses.models import Course
+from django.contrib.auth.models import AbstractBaseUser,BaseUserManager, PermissionsMixin
+from courses.models import Course
 
 # Create your models here.
 
@@ -33,9 +33,9 @@ class UserManager(BaseUserManager):
 
     return user
 
-class User(AbstractBaseUser, PermissionMixin):
+class User(AbstractBaseUser, PermissionsMixin):
   name = models.CharField(max_length = 255)
-  email = models.EmailField(max_length=255)
+  email = models.EmailField(max_length=255, unique=True)
   created = models.DateTimeField(auto_now_add=True)
   updated = models.DateTimeField(auto_now=True)
   is_staff = models.BooleanField(default=False)
