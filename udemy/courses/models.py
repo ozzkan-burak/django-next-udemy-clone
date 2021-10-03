@@ -1,5 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 import uuid
+
+User = get_user_model()
+
 
 # Create your models here.
 
@@ -14,6 +18,7 @@ class Course(models.Model):
   description = models.TextField()
   created = models.DateTimeField(auto_now_add=True)
   updated = models.DateTimeField(auto_now=True)
+  author = models.ForeignKey(User)
   language = models.CharField(max_length=50)
   course_section = models.ManyToManyField('CourseSection')
   comments = models.ManyToManyField('Comment')
@@ -31,5 +36,6 @@ class Episode(models.Model):
   length = models.DecimalField(max_length=10, decimal_places=2)
 
 class Comment(models.Model):
+  user = models.ForeignKey(User)
   message = models.TextField()
   created = models.DateTimeField(auto_now_add=True)
