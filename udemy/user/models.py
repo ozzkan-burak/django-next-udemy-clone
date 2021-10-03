@@ -17,13 +17,13 @@ class UserManager(BaseUserManager):
     if other_fields.get('is_superuser') is not True:
       return ValueError('Superuser must have is_speruser True')
     
-    return self.createuser(email, password, name, **other_fields)
+    return self.create_user(email, password, name, **other_fields)
 
   def create_user(self, email, password, name, **other_fields):
     if not email:
       raise ValueError('You must provide a valid email')
 
-    email = self.normalized_email(email)
+    email = self.normalize_email(email)
 
     user = self.model(email=email, name=name, **other_fields)
 
