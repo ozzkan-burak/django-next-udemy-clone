@@ -1,15 +1,13 @@
-from django.contrib.auth import get_user_model
 from django.db import models
 import uuid
 
-User = get_user_model()
-
+from django.conf import settings
 
 # Create your models here.
 
 class Sector(models.Model):
   name = models.CharField(max_length=255)
-  sector_uuid = models.UUIDField(defult=uuid.uuid4, unique=True)
+  sector_uuid = models.UUIDField(default=uuid.uuid4, unique=True)
   related_curse = models.ManyToManyField('Course')
   sector_image = models.ImageField(upload_to='sector_image')
 
@@ -18,7 +16,7 @@ class Course(models.Model):
   description = models.TextField()
   created = models.DateTimeField(auto_now_add=True)
   updated = models.DateTimeField(auto_now=True)
-  author = models.ForeignKey(User)
+  author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   language = models.CharField(max_length=50)
   course_section = models.ManyToManyField('CourseSection')
   comments = models.ManyToManyField('Comment')
@@ -28,14 +26,14 @@ class Course(models.Model):
 
 class CourseSection(models.Model):
   section_title = models.CharField(max_length=255)
-  episodes = models.ManyToManyField('episode')
+  episodes = models.ManyToManyField('Episode')
 
 class Episode(models.Model):
   title = models.CharField(max_length=255)
   file = models.FileField(upload_to='course_videos')
-  length = models.DecimalField(max_length=10, decimal_places=2)
+  length = models.DecimalField(max_digits=10, decimal_places=2)
 
 class Comment(models.Model):
-  user = models.ForeignKey(User)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   message = models.TextField()
   created = models.DateTimeField(auto_now_add=True)
