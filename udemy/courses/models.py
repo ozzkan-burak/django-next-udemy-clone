@@ -4,7 +4,7 @@ import uuid
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from decimal import Decimal
-from helpers import get_timer
+from .helpers import get_timer
 
 from mutagen.mp4 import MP4,MP4StreamInfoError
 
@@ -84,6 +84,10 @@ class Episode(models.Model):
   
   def get_absolute_url(self):
     return 'http://localhost:8000' + self.file
+  
+  def save(self, *args, **kwargs):
+    self.length = self.get_video_length()
+    return super().save(*args, **kwargs)
 
 class Comment(models.Model):
   user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
