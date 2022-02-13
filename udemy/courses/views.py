@@ -2,6 +2,9 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from courses.models import Sector
+
+from .serializers import CourseDisplaySerializer
 
 class CoursesHomeView(APIView):
     def get(self, request, *args, **kwargs):
@@ -9,8 +12,8 @@ class CoursesHomeView(APIView):
       
       sector_response=[]
       
-      for sector in sector:
-        sector_courses = sector.related_courses.order_by('?')[:4]
+      for sector in sectors:
+        sector_courses = sector.related_course.order_by('?')[:4]
         course_Serializer = CourseDisplaySerializer(sector_courses, many=True)
         
         sector_obj = {
